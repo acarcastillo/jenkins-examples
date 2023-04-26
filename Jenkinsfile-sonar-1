@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                sh 'python setup.py build'
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonarqube') {
+                        sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=<your-project-key> \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=<your-sonarqube-server-url> \
+                          -Dsonar.login=<your-sonarqube-token>
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
