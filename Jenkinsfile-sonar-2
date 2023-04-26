@@ -1,0 +1,9 @@
+stage('SonarQube analysis') {
+    steps {
+        script {
+            withSonarQubeEnv('sonarqube') {
+                sh "sonar-scanner -Dproject.settings=$(pwd)/sonar-project.properties"
+            }
+        }
+    }
+}
